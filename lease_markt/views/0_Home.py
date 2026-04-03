@@ -4,6 +4,8 @@ Public-facing hero, featured listings, how-it-works, trust section.
 Entry point for the Streamlit multi-page app.
 """
 
+import os
+import base64
 import streamlit as st
 
 # ── Page config (must be first Streamlit call) ──────────────────────────────
@@ -21,32 +23,55 @@ init_state()
 inject_global_css()
 
 # ────────────────────────────────────────────────────────────────────────────
-# HERO SECTION
+# HERO SECTION — two-column layout with embedded machinery illustration
 # ────────────────────────────────────────────────────────────────────────────
 
-st.html("""
-<div class="hero-section">
-  <div class="hero-eyebrow">
-    🏦 DemoBank A.Ş. · Güvenilir Makine Pazaryeri
-  </div>
-  <div class="hero-title">
-    Banka Onaylı İkinci El<br>Makine Keşif Platformu
-  </div>
-  <div class="hero-sub">
-    Listelenen her makine, yayınlanmadan önce banka tarafından incelenir ve onaylanır.
-    Güvenle inceleyin — tüm satıcılar doğrulanmış leasing müşterileridir
-    ve tüm ilanlar kalite ve fiyat standartlarımızı karşılar.
-  </div>
-  <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
-    <span style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);border-radius:999px;padding:5px 14px;font-size:0.78rem;color:rgba(255,255,255,0.85);font-weight:600;">
-      🛡️ Banka Kalite İncelemesi
-    </span>
-    <span style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);border-radius:999px;padding:5px 14px;font-size:0.78rem;color:rgba(255,255,255,0.85);font-weight:600;">
-      🔒 Yalnızca Doğrulanmış Satıcılar
-    </span>
-    <span style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);border-radius:999px;padding:5px 14px;font-size:0.78rem;color:rgba(255,255,255,0.85);font-weight:600;">
-      📋 Leasing Finansmanı Mevcut
-    </span>
+_IMG_B64_PATH = os.path.join(os.path.dirname(__file__), "..", "static", "hero_b64.txt")
+try:
+    with open(_IMG_B64_PATH, "r") as _f:
+        _hero_img_b64 = _f.read().strip()
+    _hero_img_src = f"data:image/webp;base64,{_hero_img_b64}"
+except Exception:
+    _hero_img_src = ""
+
+st.html(f"""
+<div class="hero-section" style="padding:0;overflow:hidden;border-radius:var(--radius-lg);margin-bottom:var(--space-6);">
+  <div style="display:flex;align-items:center;min-height:290px;">
+
+    <!-- Left: text content -->
+    <div style="flex:1 1 54%;padding:2.25rem 2.5rem;display:flex;flex-direction:column;justify-content:center;gap:0.9rem;">
+      <span style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#F5B942;display:block;">
+        🏦 DemoBank A.Ş. · Güvenilir Makine Pazaryeri
+      </span>
+      <div style="font-size:2rem;font-weight:800;line-height:1.18;color:white;">
+        Leasing'e Uygun<br>İkinci El Makine<br>Platformu
+      </div>
+      <div style="font-size:0.9rem;color:rgba(255,255,255,0.72);line-height:1.65;max-width:400px;">
+        Makine arayışınızı kolaylaştırın. Satıcıların ilanlarını tek platformda keşfedin,
+        beğendiğiniz ürün için avantajlı leasing çözümlerimizle bir adım öne geçin.
+      </div>
+      <div style="display:flex;gap:0.45rem;flex-wrap:wrap;margin-top:0.15rem;">
+        <span style="background:rgba(255,255,255,0.13);border:1px solid rgba(255,255,255,0.25);border-radius:999px;padding:5px 13px;font-size:0.74rem;color:rgba(255,255,255,0.9);font-weight:600;white-space:nowrap;">
+          🛡️ Banka Kalite İncelemesi
+        </span>
+        <span style="background:rgba(255,255,255,0.13);border:1px solid rgba(255,255,255,0.25);border-radius:999px;padding:5px 13px;font-size:0.74rem;color:rgba(255,255,255,0.9);font-weight:600;white-space:nowrap;">
+          🔒 Yalnızca Doğrulanmış Satıcılar
+        </span>
+        <span style="background:rgba(255,255,255,0.13);border:1px solid rgba(255,255,255,0.25);border-radius:999px;padding:5px 13px;font-size:0.74rem;color:rgba(255,255,255,0.9);font-weight:600;white-space:nowrap;">
+          📋 Leasing Finansmanı Mevcut
+        </span>
+      </div>
+    </div>
+
+    <!-- Right: machinery illustration -->
+    <div style="flex:0 0 46%;display:flex;align-items:flex-end;justify-content:center;padding:0.75rem 1rem 0 0;overflow:hidden;align-self:flex-end;">
+      <img
+        src="{_hero_img_src}"
+        alt="Endüstriyel makine çizimleri — baskı makinesi, ekskavatör ve CNC tezgahı"
+        style="width:100%;max-width:500px;display:block;filter:drop-shadow(0 -4px 28px rgba(0,0,0,0.20));margin-bottom:-2px;"
+      />
+    </div>
+
   </div>
 </div>
 """)
